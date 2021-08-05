@@ -146,7 +146,7 @@ Example
 ```golang
 auth := context.WithValue(context.Background(), sw.ContextAPIKey, sw.APIKey{
 	Key: "APIKEY",
-	Prefix: "Bearer", // Omit if not necessary.
+	Prefix: "Bearer",
 })
 r, err := client.Service.Operation(auth, args)
 ```
