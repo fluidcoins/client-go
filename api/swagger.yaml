@@ -1,0 +1,3016 @@
+---
+swagger: "2.0"
+info:
+  description: "A suite of APIs to create, manage and accept cryptocurrency payments\
+    \ in Africa"
+  version: "0.1.0"
+  title: "Fluidcoins Pay api documentation"
+  contact:
+    name: "API Support"
+    url: "https://fluidcoins.com"
+    email: "developers@fluidcoins.com"
+host: "api.fluidcoins.com"
+basePath: "/v1"
+paths:
+  /address:
+    post:
+      tags:
+      - "address"
+      summary: "Create a new address"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "message"
+        description: "Coin data"
+        required: true
+        schema:
+          $ref: "#/definitions/server.generateCoinRequest"
+        x-exportParamName: "Message"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.addressResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /address/{id}:
+    get:
+      tags:
+      - "address"
+      summary: "Fetch an address"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "address unique identifier"
+        required: true
+        type: "string"
+        x-exportParamName: "Id"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.addressResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /balances:
+    get:
+      tags:
+      - "balances"
+      summary: "Fetch all balances of a merchant"
+      description: "This endpoint is used to retrieve all balances of a merchant."
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.merchantBalanceResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+      security:
+      - ApiKeyAuth: []
+  /compliance/setup:
+    get:
+      tags:
+      - "dashboard"
+      summary: "Fetch all data used during compliance"
+      description: "This endpoint provides a way to fetch multiple datasets a business\
+        \ will need to select"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.complianceDataResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+      security:
+      - ApiKeyAuth: []
+  /currencies:
+    get:
+      tags:
+      - "currencies"
+      summary: "List currencies"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "test_net_only"
+        in: "query"
+        description: "Retrieve only coins that have a test-net network"
+        required: false
+        type: "boolean"
+        x-exportParamName: "TestNetOnly"
+        x-optionalDataType: "Bool"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.currenciesListResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /customers:
+    get:
+      tags:
+      - "customers"
+      summary: "List customers"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "page"
+        in: "query"
+        description: "Page to query data from. Defaults to 1"
+        required: false
+        type: "integer"
+        x-exportParamName: "Page"
+        x-optionalDataType: "Int32"
+      - name: "per_page"
+        in: "query"
+        description: "Number to items to return. Defaults to 20 items"
+        required: false
+        type: "integer"
+        x-exportParamName: "PerPage"
+        x-optionalDataType: "Int32"
+      - name: "blacklisted"
+        in: "query"
+        description: "Fetch blacklisted customers"
+        required: false
+        type: "boolean"
+        x-exportParamName: "Blacklisted"
+        x-optionalDataType: "Bool"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.customerListResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+    post:
+      tags:
+      - "customers"
+      summary: "Create a new customer"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "message"
+        description: "Customer data"
+        required: true
+        schema:
+          $ref: "#/definitions/server.customerCreateRequest"
+        x-exportParamName: "Message"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.customerCreateResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /customers/{id}:
+    get:
+      tags:
+      - "customers"
+      summary: "Fetch a customer"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "customer unique identifier"
+        required: true
+        type: "string"
+        x-exportParamName: "Id"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.customerRetrievalResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+    patch:
+      tags:
+      - "customers"
+      summary: "Edit a customer"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Customer unique identifier"
+        required: true
+        type: "string"
+        x-exportParamName: "Id"
+      - in: "body"
+        name: "message"
+        description: "Customer data"
+        required: true
+        schema:
+          $ref: "#/definitions/server.customerEditRequest"
+        x-exportParamName: "Message"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.customerRetrievalResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /customers/{id}/blacklist:
+    post:
+      tags:
+      - "customers"
+      summary: "Blacklists a customer"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Customer unique identifier"
+        required: true
+        type: "string"
+        x-exportParamName: "Id"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.customerRetrievalResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+    delete:
+      tags:
+      - "customers"
+      summary: "Whitelists a customer"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Customer unique identifier"
+        required: true
+        type: "string"
+        x-exportParamName: "Id"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.customerRetrievalResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /keys:
+    get:
+      tags:
+      - "developer"
+      summary: "Fetch API keys"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.apiKeysResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /keys/rotate:
+    post:
+      tags:
+      - "developer"
+      summary: "Rotate API keys"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.apiKeysResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /links:
+    get:
+      tags:
+      - "links"
+      summary: "List payment links"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "page"
+        in: "query"
+        description: "Page to query data from. Defaults to 1"
+        required: false
+        type: "integer"
+        x-exportParamName: "Page"
+        x-optionalDataType: "Int32"
+      - name: "per_page"
+        in: "query"
+        description: "Number to items to return. Defaults to 10 items"
+        required: false
+        type: "integer"
+        x-exportParamName: "PerPage"
+        x-optionalDataType: "Int32"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.customerListResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+    post:
+      tags:
+      - "links"
+      summary: "Create a new payment link"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "message"
+        description: "Payment link data"
+        required: true
+        schema:
+          $ref: "#/definitions/server.linkCreateRequest"
+        x-exportParamName: "Message"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.paymentLinkCreateResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /links/{id}:
+    get:
+      tags:
+      - "links"
+      summary: "Fetch a payment link"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Link unique identifier"
+        required: true
+        type: "string"
+        x-exportParamName: "Id"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.paymentLinkRetrievalResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+    patch:
+      tags:
+      - "links"
+      summary: "Edit payment link"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Link unique identifier"
+        required: true
+        type: "string"
+        x-exportParamName: "Id"
+      - in: "body"
+        name: "message"
+        description: "link data"
+        required: true
+        schema:
+          $ref: "#/definitions/server.linkEditRequest"
+        x-exportParamName: "Message"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.paymentLinkRetrievalResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /links/{id}/enable:
+    post:
+      tags:
+      - "links"
+      summary: "Enable a payment link for collection"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "payment link unique identifier"
+        required: true
+        type: "string"
+        x-exportParamName: "Id"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.paymentLinkRetrievalResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+    delete:
+      tags:
+      - "links"
+      summary: "Disable a payment link for collection"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "payment link unique identifier"
+        required: true
+        type: "string"
+        x-exportParamName: "Id"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.paymentLinkRetrievalResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /links/{id}/transactions:
+    get:
+      tags:
+      - "links"
+      summary: "List transactions that belong to a payment link"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Link unique identifier"
+        required: true
+        type: "string"
+        x-exportParamName: "Id"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.customerListResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /merchant:
+    get:
+      tags:
+      - "merchant"
+      summary: "Fetch the current merchant"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.merchantCreationResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /payouts:
+    get:
+      tags:
+      - "payouts"
+      summary: "List payouts"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "page"
+        in: "query"
+        description: "Page to query data from. Defaults to 1"
+        required: false
+        type: "integer"
+        x-exportParamName: "Page"
+        x-optionalDataType: "Int32"
+      - name: "per_page"
+        in: "query"
+        description: "Number to items to return. Defaults to 20 items"
+        required: false
+        type: "integer"
+        x-exportParamName: "PerPage"
+        x-optionalDataType: "Int32"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.payoutListResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+    post:
+      tags:
+      - "payouts"
+      summary: "Create a new payout account"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "message"
+        description: "payout data.. Type must be either bank or crypto"
+        required: true
+        schema:
+          $ref: "#/definitions/server.addPayoutAccountRequest"
+        x-exportParamName: "Message"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.createPayoutAccountResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /payouts/banks:
+    get:
+      tags:
+      - "payouts"
+      summary: "List banks"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "country"
+        in: "query"
+        description: "Optional. Defaults to NG"
+        required: false
+        type: "string"
+        x-exportParamName: "Country"
+        x-optionalDataType: "String"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.bankListResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /payouts/resolve:
+    get:
+      tags:
+      - "payouts"
+      summary: "Resolve bank accounts"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "bank_code"
+        in: "query"
+        description: "Sort code of the bank"
+        required: true
+        type: "string"
+        x-exportParamName: "BankCode"
+      - name: "account"
+        in: "query"
+        description: "Bank account number"
+        required: true
+        type: "string"
+        x-exportParamName: "Account"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.resolveBankAccountResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /settings/password:
+    post:
+      tags:
+      - "settings"
+      summary: "Update your password"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "message"
+        description: "Password data"
+        required: true
+        schema:
+          $ref: "#/definitions/server.updatePasswordRequest"
+        x-exportParamName: "Message"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.merchantUserResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /settings/preferences:
+    get:
+      tags:
+      - "settings"
+      summary: "Fetch preferences"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.preferencesResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+    patch:
+      tags:
+      - "settings"
+      summary: "Update preferences"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "message"
+        description: "preferences data"
+        required: true
+        schema:
+          $ref: "#/definitions/server.preferenceUpdateRequest"
+        x-exportParamName: "Message"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.preferencesResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /settings/profile:
+    patch:
+      tags:
+      - "settings"
+      summary: "Update your user profile"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "message"
+        description: "user profile request"
+        required: true
+        schema:
+          $ref: "#/definitions/server.updateUserProfileRequest"
+        x-exportParamName: "Message"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.merchantUserResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /settings/toggle-domain:
+    post:
+      tags:
+      - "settings"
+      summary: "Switch your dashboard domain from test to live and viceversa"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters: []
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.merchantCreationResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /transactions:
+    get:
+      tags:
+      - "transactions"
+      summary: "List transactions"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "page"
+        in: "query"
+        description: "Page to query data from. Defaults to 1"
+        required: false
+        type: "integer"
+        x-exportParamName: "Page"
+        x-optionalDataType: "Int32"
+      - name: "per_page"
+        in: "query"
+        description: "Number to items to return. Defaults to 20 items"
+        required: false
+        type: "integer"
+        x-exportParamName: "PerPage"
+        x-optionalDataType: "Int32"
+      - name: "status"
+        in: "query"
+        description: "Filter transactions. Defaults to all,  accepted values are pending,failed,success"
+        required: false
+        type: "string"
+        x-exportParamName: "Status"
+        x-optionalDataType: "String"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.transactionsListResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /transactions/{id}:
+    get:
+      tags:
+      - "transactions"
+      summary: "Fetch a single transaction"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "id"
+        in: "path"
+        description: "Unique ID for the transaction"
+        required: true
+        type: "string"
+        x-exportParamName: "Id"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.transactionItemResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+  /user/merchants:
+    post:
+      tags:
+      - "merchant"
+      summary: "Create a merchant"
+      description: "This endpoint creates a new merchant. Currently only one merchant\
+        \ per user"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "message"
+        description: "Login into a user account"
+        required: true
+        schema:
+          $ref: "#/definitions/server.merchantCreateRequest"
+        x-exportParamName: "Message"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/server.merchantCreationResponse"
+        "400":
+          description: "Bad Request"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "401":
+          description: "Unauthorized"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "404":
+          description: "Not Found"
+          schema:
+            $ref: "#/definitions/server.APIError"
+        "500":
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/server.APIError"
+      security:
+      - ApiKeyAuth: []
+securityDefinitions:
+  ApiKeyAuth:
+    type: "apiKey"
+    name: "Authorization"
+    in: "header"
+definitions:
+  merchant.APIKey:
+    type: "object"
+    properties:
+      created_at:
+        type: "string"
+      domain:
+        type: "string"
+      id:
+        type: "string"
+      key_type:
+        type: "integer"
+      merchant_id:
+        type: "string"
+      updated_at:
+        type: "string"
+      value:
+        type: "string"
+    example:
+      key_type: 0
+      updated_at: "updated_at"
+      domain: "domain"
+      created_at: "created_at"
+      id: "id"
+      merchant_id: "merchant_id"
+      value: "value"
+  merchant.Address:
+    type: "object"
+    properties:
+      address:
+        type: "string"
+      created_at:
+        type: "string"
+      domain:
+        type: "string"
+      id:
+        type: "string"
+      merchant_id:
+        type: "string"
+      metadata:
+        $ref: "#/definitions/merchant.CoinMetadata"
+      reference:
+        type: "string"
+        description: "Refernece is the unique ID for this address. You can use this\
+          \ id to\nfetch the address again"
+      updated_at:
+        type: "string"
+    example:
+      reference: "reference"
+      metadata:
+        memo: "memo"
+        destination_tag: 0
+      address: "address"
+      updated_at: "updated_at"
+      domain: "domain"
+      created_at: "created_at"
+      id: "id"
+      merchant_id: "merchant_id"
+  merchant.Bank:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+      country:
+        type: "string"
+      name:
+        type: "string"
+    example:
+      country: "country"
+      code: "code"
+      name: "name"
+  merchant.BankPayoutAccount:
+    type: "object"
+    properties:
+      account_name:
+        type: "string"
+      account_number:
+        type: "string"
+      bank_code:
+        type: "string"
+      bank_name:
+        type: "string"
+    example:
+      account_number: "account_number"
+      bank_code: "bank_code"
+      account_name: "account_name"
+      bank_name: "bank_name"
+  merchant.CoinMetadata:
+    type: "object"
+    properties:
+      destination_tag:
+        type: "integer"
+        description: "XRP addresses must have a destination tag"
+      memo:
+        type: "string"
+        description: "XLM requires a memo"
+    example:
+      memo: "memo"
+      destination_tag: 0
+  merchant.Country:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+      english_name:
+        type: "string"
+      id:
+        type: "string"
+    example:
+      code: "code"
+      id: "id"
+      english_name: "english_name"
+  merchant.CryptoPayoutAccount:
+    type: "object"
+    properties:
+      address:
+        type: "string"
+      coin:
+        type: "string"
+      label:
+        type: "string"
+    example:
+      address: "address"
+      label: "label"
+      coin: "coin"
+  merchant.Industry:
+    type: "object"
+    properties:
+      created_at:
+        type: "string"
+      id:
+        type: "string"
+      industry_name:
+        type: "string"
+      updated_at:
+        type: "string"
+    example:
+      industry_name: "industry_name"
+      updated_at: "updated_at"
+      created_at: "created_at"
+      id: "id"
+  merchant.Merchant:
+    type: "object"
+    properties:
+      business_name:
+        type: "string"
+      country:
+        $ref: "#/definitions/merchant.Country"
+      country_id:
+        type: "string"
+      created_at:
+        type: "string"
+      dashboard_domain:
+        type: "string"
+        description: "This is what we show on the dashboard.\nDoes not determine anything\
+          \ else like if the merchant has gone into\nlive mode or can accept payments"
+      description:
+        type: "string"
+      id:
+        type: "string"
+      industry_id:
+        type: "string"
+      updated_at:
+        type: "string"
+      verification_status:
+        type: "integer"
+      verification_type:
+        type: "integer"
+    example:
+      business_name: "business_name"
+      country:
+        code: "code"
+        id: "id"
+        english_name: "english_name"
+      industry_id: "industry_id"
+      dashboard_domain: "dashboard_domain"
+      updated_at: "updated_at"
+      created_at: "created_at"
+      description: "description"
+      verification_type: 6
+      id: "id"
+      verification_status: 0
+      country_id: "country_id"
+  merchant.MerchantCoin:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+      created_at:
+        type: "string"
+      has_test_net:
+        type: "boolean"
+      human_readable_name:
+        type: "string"
+      id:
+        type: "string"
+      image:
+        type: "string"
+        description: "This is a base64 encoded image not an actual url/resource"
+      is_active:
+        type: "boolean"
+        description: "IsActive determines whether a coin can be used by any merchant\
+          \ to\naccept payment via our widget. A merchant can still maintain a\nbalance\
+          \ in such coin. New payments will just be disabled for the said\ncoin\n\
+          This can also be used for fiat currencies that we don't want people\nto\
+          \ accept money in\nTo also point out, this denotes live mode.\nIf IsActive,\
+          \ it will be accepted in live mode"
+      metadata:
+        $ref: "merchant.MerchantCoin_metadata"
+      updated_at:
+        type: "string"
+    example:
+      image: "image"
+      metadata:
+        is_stable_coin: true
+      code: "code"
+      is_active: true
+      updated_at: "updated_at"
+      has_test_net: true
+      created_at: "created_at"
+      human_readable_name: "human_readable_name"
+      id: "id"
+  merchant.MerchantCustomer:
+    type: "object"
+    properties:
+      created_at:
+        type: "string"
+      domain:
+        type: "string"
+      email:
+        type: "string"
+      full_name:
+        type: "string"
+      id:
+        type: "string"
+      is_blacklisted:
+        type: "boolean"
+      merchant_id:
+        type: "string"
+      phone_number:
+        type: "string"
+      reference:
+        type: "string"
+      updated_at:
+        type: "string"
+    example:
+      reference: "reference"
+      full_name: "full_name"
+      updated_at: "updated_at"
+      domain: "domain"
+      created_at: "created_at"
+      is_blacklisted: true
+      phone_number: "phone_number"
+      id: "id"
+      merchant_id: "merchant_id"
+      email: "email"
+  merchant.MerchantRole:
+    type: "object"
+    properties:
+      counter:
+        type: "integer"
+      created_at:
+        type: "string"
+      id:
+        type: "string"
+      merchant_id:
+        type: "string"
+      role:
+        type: "integer"
+      updated_at:
+        type: "string"
+      user_id:
+        type: "string"
+    example:
+      role: 5
+      updated_at: "updated_at"
+      user_id: "user_id"
+      created_at: "created_at"
+      counter: 1
+      id: "id"
+      merchant_id: "merchant_id"
+  merchant.MerchantUser:
+    type: "object"
+    properties:
+      country:
+        $ref: "#/definitions/merchant.Country"
+      country_id:
+        type: "string"
+      created_at:
+        type: "string"
+      email:
+        type: "string"
+      full_name:
+        type: "string"
+      id:
+        type: "string"
+      is_email_verified:
+        type: "boolean"
+      password:
+        type: "string"
+      roles:
+        type: "array"
+        items:
+          $ref: "#/definitions/merchant.MerchantRole"
+      updated_at:
+        type: "string"
+    example:
+      country:
+        code: "code"
+        id: "id"
+        english_name: "english_name"
+      password: "password"
+      full_name: "full_name"
+      updated_at: "updated_at"
+      is_email_verified: true
+      roles:
+      - role: 5
+        updated_at: "updated_at"
+        user_id: "user_id"
+        created_at: "created_at"
+        counter: 1
+        id: "id"
+        merchant_id: "merchant_id"
+      - role: 5
+        updated_at: "updated_at"
+        user_id: "user_id"
+        created_at: "created_at"
+        counter: 1
+        id: "id"
+        merchant_id: "merchant_id"
+      created_at: "created_at"
+      id: "id"
+      country_id: "country_id"
+      email: "email"
+  merchant.MerchantWallet:
+    type: "object"
+    properties:
+      amount:
+        type: "integer"
+      coin:
+        $ref: "#/definitions/merchant.MerchantCoin"
+      coin_id:
+        type: "string"
+      created_at:
+        type: "string"
+      domain:
+        type: "string"
+      id:
+        type: "string"
+      merchant_id:
+        type: "string"
+      updated_at:
+        type: "string"
+    example:
+      amount: 0
+      coin_id: "coin_id"
+      updated_at: "updated_at"
+      domain: "domain"
+      created_at: "created_at"
+      id: "id"
+      merchant_id: "merchant_id"
+      coin:
+        image: "image"
+        metadata:
+          is_stable_coin: true
+        code: "code"
+        is_active: true
+        updated_at: "updated_at"
+        has_test_net: true
+        created_at: "created_at"
+        human_readable_name: "human_readable_name"
+        id: "id"
+  merchant.PaymentLink:
+    type: "object"
+    properties:
+      amount:
+        type: "integer"
+        description: "Can be zero. If zero, the user has to select the amount to pay"
+      created_at:
+        type: "string"
+      description:
+        type: "string"
+      domain:
+        type: "string"
+      id:
+        type: "string"
+      identifier:
+        type: "string"
+      is_enabled:
+        type: "boolean"
+      merchant_id:
+        type: "string"
+      metadata:
+        $ref: "#/definitions/merchant.PaymentLinkMetadata"
+      title:
+        type: "string"
+      updated_at:
+        type: "string"
+    example:
+      is_enabled: true
+      identifier: "identifier"
+      amount: 0
+      metadata:
+        collect_phone_number: true
+      updated_at: "updated_at"
+      domain: "domain"
+      created_at: "created_at"
+      description: "description"
+      id: "id"
+      merchant_id: "merchant_id"
+      title: "title"
+  merchant.PaymentLinkMetadata:
+    type: "object"
+    properties:
+      collect_phone_number:
+        type: "boolean"
+    example:
+      collect_phone_number: true
+  merchant.PayoutAccount:
+    type: "object"
+    properties:
+      bank:
+        $ref: "#/definitions/merchant.BankPayoutAccount"
+      created_at:
+        type: "string"
+      crypto:
+        $ref: "#/definitions/merchant.CryptoPayoutAccount"
+      domain:
+        type: "string"
+      id:
+        type: "string"
+      merchant_id:
+        type: "string"
+      payout_type:
+        type: "integer"
+      reference:
+        type: "string"
+      updated_at:
+        type: "string"
+    example:
+      reference: "reference"
+      bank:
+        account_number: "account_number"
+        bank_code: "bank_code"
+        account_name: "account_name"
+        bank_name: "bank_name"
+      updated_at: "updated_at"
+      domain: "domain"
+      created_at: "created_at"
+      payout_type: 0
+      id: "id"
+      merchant_id: "merchant_id"
+      crypto:
+        address: "address"
+        label: "label"
+        coin: "coin"
+  merchant.Preferences:
+    type: "object"
+    properties:
+      domain:
+        type: "string"
+      merchant_id:
+        type: "string"
+      settlement:
+        $ref: "#/definitions/merchant.SettlementPreference"
+      widget:
+        $ref: "#/definitions/merchant.WidgetPreference"
+    example:
+      widget:
+        only_stable_coins: true
+      domain: "domain"
+      merchant_id: "merchant_id"
+      settlement:
+        settle_to_payment_currency: true
+  merchant.SettlementPreference:
+    type: "object"
+    properties:
+      settle_to_payment_currency:
+        type: "boolean"
+    example:
+      settle_to_payment_currency: true
+  merchant.Transaction:
+    type: "object"
+    properties:
+      amount:
+        type: "integer"
+      created_at:
+        type: "string"
+      customer:
+        $ref: "#/definitions/merchant.MerchantCustomer"
+      domain:
+        type: "string"
+      id:
+        type: "string"
+      metadata:
+        $ref: "#/definitions/merchant.TransactionMetadata"
+      payment_link_id:
+        type: "string"
+      reference:
+        type: "string"
+      status:
+        type: "string"
+      updated_at:
+        type: "string"
+    example:
+      reference: "reference"
+      amount: 0
+      metadata:
+        widget_coins:
+        - amount: 7
+          address: "address"
+          code: "code"
+          human_readable_amount: "human_readable_amount"
+          fiat_exchange_rate: 3
+          logo: "logo"
+          memo: "memo"
+          human_readable_name: "human_readable_name"
+          destination_tag: 9
+        - amount: 7
+          address: "address"
+          code: "code"
+          human_readable_amount: "human_readable_amount"
+          fiat_exchange_rate: 3
+          logo: "logo"
+          memo: "memo"
+          human_readable_name: "human_readable_name"
+          destination_tag: 9
+        is_widget_payment: true
+        provider: "provider"
+        ip: "ip"
+        payment:
+          amount: 1
+          refund_status: 2
+          refund_amount: 5
+          coin: 5
+        onchain:
+          to_address: "to_address"
+          confirmations: 6
+          from_address: "from_address"
+          hash: "hash"
+      updated_at: "updated_at"
+      payment_link_id: "payment_link_id"
+      domain: "domain"
+      created_at: "created_at"
+      id: "id"
+      customer:
+        reference: "reference"
+        full_name: "full_name"
+        updated_at: "updated_at"
+        domain: "domain"
+        created_at: "created_at"
+        is_blacklisted: true
+        phone_number: "phone_number"
+        id: "id"
+        merchant_id: "merchant_id"
+        email: "email"
+      status: "status"
+  merchant.TransactionMetadata:
+    type: "object"
+    properties:
+      ip:
+        type: "string"
+      is_widget_payment:
+        type: "boolean"
+        description: "Determines if this payment was done by Fluidcoins widget"
+      onchain:
+        $ref: "merchant.TransactionMetadata_onchain"
+      payment:
+        $ref: "merchant.TransactionMetadata_payment"
+      provider:
+        type: "string"
+      widget_coins:
+        type: "array"
+        items:
+          $ref: "#/definitions/merchant.WidgetCoin"
+    example:
+      widget_coins:
+      - amount: 7
+        address: "address"
+        code: "code"
+        human_readable_amount: "human_readable_amount"
+        fiat_exchange_rate: 3
+        logo: "logo"
+        memo: "memo"
+        human_readable_name: "human_readable_name"
+        destination_tag: 9
+      - amount: 7
+        address: "address"
+        code: "code"
+        human_readable_amount: "human_readable_amount"
+        fiat_exchange_rate: 3
+        logo: "logo"
+        memo: "memo"
+        human_readable_name: "human_readable_name"
+        destination_tag: 9
+      is_widget_payment: true
+      provider: "provider"
+      ip: "ip"
+      payment:
+        amount: 1
+        refund_status: 2
+        refund_amount: 5
+        coin: 5
+      onchain:
+        to_address: "to_address"
+        confirmations: 6
+        from_address: "from_address"
+        hash: "hash"
+  merchant.WidgetCoin:
+    type: "object"
+    properties:
+      address:
+        type: "string"
+      amount:
+        type: "integer"
+      code:
+        type: "string"
+      destination_tag:
+        type: "integer"
+      fiat_exchange_rate:
+        type: "integer"
+      human_readable_amount:
+        type: "string"
+      human_readable_name:
+        type: "string"
+      logo:
+        type: "string"
+      memo:
+        type: "string"
+    example:
+      amount: 7
+      address: "address"
+      code: "code"
+      human_readable_amount: "human_readable_amount"
+      fiat_exchange_rate: 3
+      logo: "logo"
+      memo: "memo"
+      human_readable_name: "human_readable_name"
+      destination_tag: 9
+  merchant.WidgetInitilizationOptions:
+    type: "object"
+    properties:
+      coins:
+        type: "array"
+        items:
+          $ref: "#/definitions/merchant.WidgetCoin"
+      payment_methods:
+        type: "array"
+        items:
+          $ref: "#/definitions/merchant.WidgetPaymentMethod"
+      transaction:
+        $ref: "#/definitions/merchant.WidgetTransaction"
+  merchant.WidgetPaymentMethod:
+    type: "object"
+    properties:
+      is_enabled:
+        type: "boolean"
+      method:
+        type: "string"
+      slug:
+        type: "string"
+  merchant.WidgetPreference:
+    type: "object"
+    properties:
+      only_stable_coins:
+        type: "boolean"
+    example:
+      only_stable_coins: true
+  merchant.WidgetTransaction:
+    type: "object"
+    properties:
+      amount:
+        type: "integer"
+        description: "Value of transaction in Merchant =currency\nUsually Naira"
+      currency:
+        type: "string"
+      id:
+        type: "string"
+      merchant:
+        $ref: "merchant.WidgetTransaction_merchant"
+      reference:
+        type: "string"
+  server.APIError:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+  server.addPayoutAccountRequest:
+    type: "object"
+    properties:
+      bank:
+        $ref: "server.addPayoutAccountRequest_bank"
+      crypto:
+        $ref: "server.addPayoutAccountRequest_crypto"
+      type:
+        type: "string"
+  server.addressResponse:
+    type: "object"
+    properties:
+      address:
+        $ref: "#/definitions/merchant.Address"
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+    example:
+      address:
+        reference: "reference"
+        metadata:
+          memo: "memo"
+          destination_tag: 0
+        address: "address"
+        updated_at: "updated_at"
+        domain: "domain"
+        created_at: "created_at"
+        id: "id"
+        merchant_id: "merchant_id"
+      message: "message"
+      status: true
+  server.apiKeysResponse:
+    type: "object"
+    properties:
+      keys:
+        type: "array"
+        items:
+          $ref: "#/definitions/merchant.APIKey"
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+    example:
+      keys:
+      - key_type: 0
+        updated_at: "updated_at"
+        domain: "domain"
+        created_at: "created_at"
+        id: "id"
+        merchant_id: "merchant_id"
+        value: "value"
+      - key_type: 0
+        updated_at: "updated_at"
+        domain: "domain"
+        created_at: "created_at"
+        id: "id"
+        merchant_id: "merchant_id"
+        value: "value"
+      message: "message"
+      status: true
+  server.bankListResponse:
+    type: "object"
+    properties:
+      banks:
+        type: "array"
+        items:
+          $ref: "#/definitions/merchant.Bank"
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+    example:
+      banks:
+      - country: "country"
+        code: "code"
+        name: "name"
+      - country: "country"
+        code: "code"
+        name: "name"
+      message: "message"
+      status: true
+  server.complianceDataResponse:
+    type: "object"
+    properties:
+      industries:
+        type: "array"
+        items:
+          $ref: "#/definitions/merchant.Industry"
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+      uploader:
+        $ref: "server.complianceDataResponse_uploader"
+    example:
+      uploader:
+        expiration: 0
+        secret: "secret"
+      industries:
+      - industry_name: "industry_name"
+        updated_at: "updated_at"
+        created_at: "created_at"
+        id: "id"
+      - industry_name: "industry_name"
+        updated_at: "updated_at"
+        created_at: "created_at"
+        id: "id"
+      message: "message"
+      status: true
+  server.createPayoutAccountResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+      payout:
+        $ref: "#/definitions/merchant.PayoutAccount"
+      status:
+        type: "boolean"
+    example:
+      payout:
+        reference: "reference"
+        bank:
+          account_number: "account_number"
+          bank_code: "bank_code"
+          account_name: "account_name"
+          bank_name: "bank_name"
+        updated_at: "updated_at"
+        domain: "domain"
+        created_at: "created_at"
+        payout_type: 0
+        id: "id"
+        merchant_id: "merchant_id"
+        crypto:
+          address: "address"
+          label: "label"
+          coin: "coin"
+      message: "message"
+      status: true
+  server.currenciesListResponse:
+    type: "object"
+    properties:
+      currencies:
+        type: "array"
+        items:
+          $ref: "#/definitions/merchant.MerchantCoin"
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+    example:
+      message: "message"
+      currencies:
+      - image: "image"
+        metadata:
+          is_stable_coin: true
+        code: "code"
+        is_active: true
+        updated_at: "updated_at"
+        has_test_net: true
+        created_at: "created_at"
+        human_readable_name: "human_readable_name"
+        id: "id"
+      - image: "image"
+        metadata:
+          is_stable_coin: true
+        code: "code"
+        is_active: true
+        updated_at: "updated_at"
+        has_test_net: true
+        created_at: "created_at"
+        human_readable_name: "human_readable_name"
+        id: "id"
+      status: true
+  server.customerCreateRequest:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      full_name:
+        type: "string"
+      phone:
+        $ref: "server.customerCreateRequest_phone"
+  server.customerCreateResponse:
+    type: "object"
+    properties:
+      customer:
+        $ref: "#/definitions/merchant.MerchantCustomer"
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+    example:
+      message: "message"
+      customer:
+        reference: "reference"
+        full_name: "full_name"
+        updated_at: "updated_at"
+        domain: "domain"
+        created_at: "created_at"
+        is_blacklisted: true
+        phone_number: "phone_number"
+        id: "id"
+        merchant_id: "merchant_id"
+        email: "email"
+      status: true
+  server.customerEditRequest:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      full_name:
+        type: "string"
+      phone:
+        $ref: "server.customerCreateRequest_phone"
+  server.customerListResponse:
+    type: "object"
+    properties:
+      customers:
+        type: "array"
+        items:
+          $ref: "#/definitions/merchant.MerchantCustomer"
+      message:
+        type: "string"
+      meta:
+        $ref: "#/definitions/server.meta"
+      status:
+        type: "boolean"
+    example:
+      meta:
+        paging:
+          per_page: 6
+          total: 1
+          page: 0
+      customers:
+      - reference: "reference"
+        full_name: "full_name"
+        updated_at: "updated_at"
+        domain: "domain"
+        created_at: "created_at"
+        is_blacklisted: true
+        phone_number: "phone_number"
+        id: "id"
+        merchant_id: "merchant_id"
+        email: "email"
+      - reference: "reference"
+        full_name: "full_name"
+        updated_at: "updated_at"
+        domain: "domain"
+        created_at: "created_at"
+        is_blacklisted: true
+        phone_number: "phone_number"
+        id: "id"
+        merchant_id: "merchant_id"
+        email: "email"
+      message: "message"
+      status: true
+  server.customerRetrievalResponse:
+    type: "object"
+    properties:
+      customer:
+        $ref: "#/definitions/merchant.MerchantCustomer"
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+    example:
+      message: "message"
+      customer:
+        reference: "reference"
+        full_name: "full_name"
+        updated_at: "updated_at"
+        domain: "domain"
+        created_at: "created_at"
+        is_blacklisted: true
+        phone_number: "phone_number"
+        id: "id"
+        merchant_id: "merchant_id"
+        email: "email"
+      status: true
+  server.generateCoinRequest:
+    type: "object"
+    properties:
+      coin:
+        type: "string"
+        description: "Code for the coin you want to generate an address for. e.g (XLM,\
+          \ USDC)"
+  server.initWidgetTransactionRequest:
+    type: "object"
+    properties:
+      amount:
+        type: "integer"
+        description: "Amount. Must be formatte in Kobo. Minimum of 500 Naira"
+      api_key:
+        type: "string"
+        description: "Public key only. Never pass your secret key here"
+      customer_name:
+        type: "string"
+        description: "Not required. But the customer name. SDK shoudl allow people\
+          \ set this\nor not"
+      email:
+        type: "string"
+        description: "Customer email. Required"
+      payment_link_id:
+        type: "string"
+        description: "If coming from a payment page. Put the id of the payment page\
+          \ here.\nIf this is set, it will use the amount from the payment page instead\n\
+          and disregard the amount field in this request"
+  server.linkCreateRequest:
+    type: "object"
+    properties:
+      amount:
+        type: "integer"
+      collect_phone_number:
+        type: "boolean"
+      description:
+        type: "string"
+      title:
+        type: "string"
+  server.linkEditRequest:
+    type: "object"
+    properties:
+      amount:
+        type: "integer"
+      collect_phone_number:
+        type: "boolean"
+      description:
+        type: "string"
+      title:
+        type: "string"
+  server.merchantBalanceResponse:
+    type: "object"
+    properties:
+      balances:
+        type: "array"
+        items:
+          $ref: "#/definitions/merchant.MerchantWallet"
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+    example:
+      balances:
+      - amount: 0
+        coin_id: "coin_id"
+        updated_at: "updated_at"
+        domain: "domain"
+        created_at: "created_at"
+        id: "id"
+        merchant_id: "merchant_id"
+        coin:
+          image: "image"
+          metadata:
+            is_stable_coin: true
+          code: "code"
+          is_active: true
+          updated_at: "updated_at"
+          has_test_net: true
+          created_at: "created_at"
+          human_readable_name: "human_readable_name"
+          id: "id"
+      - amount: 0
+        coin_id: "coin_id"
+        updated_at: "updated_at"
+        domain: "domain"
+        created_at: "created_at"
+        id: "id"
+        merchant_id: "merchant_id"
+        coin:
+          image: "image"
+          metadata:
+            is_stable_coin: true
+          code: "code"
+          is_active: true
+          updated_at: "updated_at"
+          has_test_net: true
+          created_at: "created_at"
+          human_readable_name: "human_readable_name"
+          id: "id"
+      message: "message"
+      status: true
+  server.merchantCreateRequest:
+    type: "object"
+    properties:
+      description:
+        type: "string"
+      industry:
+        type: "string"
+      name:
+        type: "string"
+      verification_type:
+        type: "integer"
+  server.merchantCreationResponse:
+    type: "object"
+    properties:
+      merchant:
+        $ref: "#/definitions/merchant.Merchant"
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+      user:
+        $ref: "#/definitions/merchant.MerchantUser"
+    example:
+      merchant:
+        business_name: "business_name"
+        country:
+          code: "code"
+          id: "id"
+          english_name: "english_name"
+        industry_id: "industry_id"
+        dashboard_domain: "dashboard_domain"
+        updated_at: "updated_at"
+        created_at: "created_at"
+        description: "description"
+        verification_type: 6
+        id: "id"
+        verification_status: 0
+        country_id: "country_id"
+      message: "message"
+      user:
+        country:
+          code: "code"
+          id: "id"
+          english_name: "english_name"
+        password: "password"
+        full_name: "full_name"
+        updated_at: "updated_at"
+        is_email_verified: true
+        roles:
+        - role: 5
+          updated_at: "updated_at"
+          user_id: "user_id"
+          created_at: "created_at"
+          counter: 1
+          id: "id"
+          merchant_id: "merchant_id"
+        - role: 5
+          updated_at: "updated_at"
+          user_id: "user_id"
+          created_at: "created_at"
+          counter: 1
+          id: "id"
+          merchant_id: "merchant_id"
+        created_at: "created_at"
+        id: "id"
+        country_id: "country_id"
+        email: "email"
+      status: true
+  server.merchantUserAuthenticationResponse:
+    type: "object"
+    properties:
+      merchant:
+        $ref: "#/definitions/merchant.Merchant"
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+      token:
+        type: "string"
+      user:
+        $ref: "#/definitions/merchant.MerchantUser"
+  server.merchantUserCreateResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+      token:
+        type: "string"
+      user:
+        $ref: "#/definitions/merchant.MerchantUser"
+  server.merchantUserResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+      user:
+        $ref: "#/definitions/merchant.MerchantUser"
+    example:
+      message: "message"
+      user:
+        country:
+          code: "code"
+          id: "id"
+          english_name: "english_name"
+        password: "password"
+        full_name: "full_name"
+        updated_at: "updated_at"
+        is_email_verified: true
+        roles:
+        - role: 5
+          updated_at: "updated_at"
+          user_id: "user_id"
+          created_at: "created_at"
+          counter: 1
+          id: "id"
+          merchant_id: "merchant_id"
+        - role: 5
+          updated_at: "updated_at"
+          user_id: "user_id"
+          created_at: "created_at"
+          counter: 1
+          id: "id"
+          merchant_id: "merchant_id"
+        created_at: "created_at"
+        id: "id"
+        country_id: "country_id"
+        email: "email"
+      status: true
+  server.meta:
+    type: "object"
+    properties:
+      paging:
+        $ref: "#/definitions/server.pagingInfo"
+    example:
+      paging:
+        per_page: 6
+        total: 1
+        page: 0
+  server.pagingInfo:
+    type: "object"
+    properties:
+      page:
+        type: "integer"
+      per_page:
+        type: "integer"
+      total:
+        type: "integer"
+    example:
+      per_page: 6
+      total: 1
+      page: 0
+  server.paymentLinkCreateResponse:
+    type: "object"
+    properties:
+      link:
+        $ref: "#/definitions/merchant.PaymentLink"
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+    example:
+      link:
+        is_enabled: true
+        identifier: "identifier"
+        amount: 0
+        metadata:
+          collect_phone_number: true
+        updated_at: "updated_at"
+        domain: "domain"
+        created_at: "created_at"
+        description: "description"
+        id: "id"
+        merchant_id: "merchant_id"
+        title: "title"
+      message: "message"
+      status: true
+  server.paymentLinkRetrievalResponse:
+    type: "object"
+    properties:
+      link:
+        $ref: "#/definitions/merchant.PaymentLink"
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+    example:
+      link:
+        is_enabled: true
+        identifier: "identifier"
+        amount: 0
+        metadata:
+          collect_phone_number: true
+        updated_at: "updated_at"
+        domain: "domain"
+        created_at: "created_at"
+        description: "description"
+        id: "id"
+        merchant_id: "merchant_id"
+        title: "title"
+      message: "message"
+      status: true
+  server.payoutListResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+      meta:
+        $ref: "#/definitions/server.meta"
+      payouts:
+        type: "array"
+        items:
+          $ref: "#/definitions/merchant.PayoutAccount"
+      status:
+        type: "boolean"
+    example:
+      payouts:
+      - reference: "reference"
+        bank:
+          account_number: "account_number"
+          bank_code: "bank_code"
+          account_name: "account_name"
+          bank_name: "bank_name"
+        updated_at: "updated_at"
+        domain: "domain"
+        created_at: "created_at"
+        payout_type: 0
+        id: "id"
+        merchant_id: "merchant_id"
+        crypto:
+          address: "address"
+          label: "label"
+          coin: "coin"
+      - reference: "reference"
+        bank:
+          account_number: "account_number"
+          bank_code: "bank_code"
+          account_name: "account_name"
+          bank_name: "bank_name"
+        updated_at: "updated_at"
+        domain: "domain"
+        created_at: "created_at"
+        payout_type: 0
+        id: "id"
+        merchant_id: "merchant_id"
+        crypto:
+          address: "address"
+          label: "label"
+          coin: "coin"
+      meta:
+        paging:
+          per_page: 6
+          total: 1
+          page: 0
+      message: "message"
+      status: true
+  server.preferenceUpdateRequest:
+    type: "object"
+    properties:
+      settlement:
+        $ref: "#/definitions/merchant.SettlementPreference"
+      widget:
+        $ref: "#/definitions/merchant.WidgetPreference"
+  server.preferencesResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+      preferences:
+        $ref: "#/definitions/merchant.Preferences"
+      status:
+        type: "boolean"
+    example:
+      preferences:
+        widget:
+          only_stable_coins: true
+        domain: "domain"
+        merchant_id: "merchant_id"
+        settlement:
+          settle_to_payment_currency: true
+      message: "message"
+      status: true
+  server.publicPaymentLinkResponse:
+    type: "object"
+    properties:
+      link:
+        $ref: "server.publicPaymentLinkResponse_link"
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+  server.resolveBankAccountResponse:
+    type: "object"
+    properties:
+      account:
+        $ref: "merchant.WidgetTransaction_merchant"
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+    example:
+      message: "message"
+      account:
+        name: "name"
+      status: true
+  server.transactionItemResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+      transaction:
+        $ref: "#/definitions/merchant.Transaction"
+    example:
+      message: "message"
+      transaction:
+        reference: "reference"
+        amount: 0
+        metadata:
+          widget_coins:
+          - amount: 7
+            address: "address"
+            code: "code"
+            human_readable_amount: "human_readable_amount"
+            fiat_exchange_rate: 3
+            logo: "logo"
+            memo: "memo"
+            human_readable_name: "human_readable_name"
+            destination_tag: 9
+          - amount: 7
+            address: "address"
+            code: "code"
+            human_readable_amount: "human_readable_amount"
+            fiat_exchange_rate: 3
+            logo: "logo"
+            memo: "memo"
+            human_readable_name: "human_readable_name"
+            destination_tag: 9
+          is_widget_payment: true
+          provider: "provider"
+          ip: "ip"
+          payment:
+            amount: 1
+            refund_status: 2
+            refund_amount: 5
+            coin: 5
+          onchain:
+            to_address: "to_address"
+            confirmations: 6
+            from_address: "from_address"
+            hash: "hash"
+        updated_at: "updated_at"
+        payment_link_id: "payment_link_id"
+        domain: "domain"
+        created_at: "created_at"
+        id: "id"
+        customer:
+          reference: "reference"
+          full_name: "full_name"
+          updated_at: "updated_at"
+          domain: "domain"
+          created_at: "created_at"
+          is_blacklisted: true
+          phone_number: "phone_number"
+          id: "id"
+          merchant_id: "merchant_id"
+          email: "email"
+        status: "status"
+      status: true
+  server.transactionStatus:
+    type: "object"
+    properties:
+      amount:
+        type: "integer"
+      coin:
+        type: "string"
+      overpaid:
+        type: "boolean"
+      paid_in_full:
+        type: "boolean"
+      reference:
+        type: "string"
+      underpaid:
+        type: "boolean"
+  server.transactionStatusResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+      transaction:
+        $ref: "#/definitions/server.transactionStatus"
+  server.transactionsListResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+      meta:
+        $ref: "#/definitions/server.meta"
+      status:
+        type: "boolean"
+      transactions:
+        type: "array"
+        items:
+          $ref: "#/definitions/merchant.Transaction"
+    example:
+      meta:
+        paging:
+          per_page: 6
+          total: 1
+          page: 0
+      message: "message"
+      transactions:
+      - reference: "reference"
+        amount: 0
+        metadata:
+          widget_coins:
+          - amount: 7
+            address: "address"
+            code: "code"
+            human_readable_amount: "human_readable_amount"
+            fiat_exchange_rate: 3
+            logo: "logo"
+            memo: "memo"
+            human_readable_name: "human_readable_name"
+            destination_tag: 9
+          - amount: 7
+            address: "address"
+            code: "code"
+            human_readable_amount: "human_readable_amount"
+            fiat_exchange_rate: 3
+            logo: "logo"
+            memo: "memo"
+            human_readable_name: "human_readable_name"
+            destination_tag: 9
+          is_widget_payment: true
+          provider: "provider"
+          ip: "ip"
+          payment:
+            amount: 1
+            refund_status: 2
+            refund_amount: 5
+            coin: 5
+          onchain:
+            to_address: "to_address"
+            confirmations: 6
+            from_address: "from_address"
+            hash: "hash"
+        updated_at: "updated_at"
+        payment_link_id: "payment_link_id"
+        domain: "domain"
+        created_at: "created_at"
+        id: "id"
+        customer:
+          reference: "reference"
+          full_name: "full_name"
+          updated_at: "updated_at"
+          domain: "domain"
+          created_at: "created_at"
+          is_blacklisted: true
+          phone_number: "phone_number"
+          id: "id"
+          merchant_id: "merchant_id"
+          email: "email"
+        status: "status"
+      - reference: "reference"
+        amount: 0
+        metadata:
+          widget_coins:
+          - amount: 7
+            address: "address"
+            code: "code"
+            human_readable_amount: "human_readable_amount"
+            fiat_exchange_rate: 3
+            logo: "logo"
+            memo: "memo"
+            human_readable_name: "human_readable_name"
+            destination_tag: 9
+          - amount: 7
+            address: "address"
+            code: "code"
+            human_readable_amount: "human_readable_amount"
+            fiat_exchange_rate: 3
+            logo: "logo"
+            memo: "memo"
+            human_readable_name: "human_readable_name"
+            destination_tag: 9
+          is_widget_payment: true
+          provider: "provider"
+          ip: "ip"
+          payment:
+            amount: 1
+            refund_status: 2
+            refund_amount: 5
+            coin: 5
+          onchain:
+            to_address: "to_address"
+            confirmations: 6
+            from_address: "from_address"
+            hash: "hash"
+        updated_at: "updated_at"
+        payment_link_id: "payment_link_id"
+        domain: "domain"
+        created_at: "created_at"
+        id: "id"
+        customer:
+          reference: "reference"
+          full_name: "full_name"
+          updated_at: "updated_at"
+          domain: "domain"
+          created_at: "created_at"
+          is_blacklisted: true
+          phone_number: "phone_number"
+          id: "id"
+          merchant_id: "merchant_id"
+          email: "email"
+        status: "status"
+      status: true
+  server.updatePasswordRequest:
+    type: "object"
+    properties:
+      confirm_password:
+        type: "string"
+      current_password:
+        type: "string"
+      new_password:
+        type: "string"
+  server.updateUserProfileRequest:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      full_name:
+        type: "string"
+  server.userAuthenticationRequest:
+    type: "object"
+    properties:
+      email:
+        type: "string"
+      password:
+        type: "string"
+  server.userCreateRequest:
+    type: "object"
+    properties:
+      confirm_password:
+        type: "string"
+      country:
+        type: "string"
+      email:
+        type: "string"
+      full_name:
+        type: "string"
+      password:
+        type: "string"
+      terms_and_conditions:
+        type: "boolean"
+  server.widgetInitalizationResponse:
+    type: "object"
+    properties:
+      message:
+        type: "string"
+      status:
+        type: "boolean"
+      widget:
+        $ref: "#/definitions/merchant.WidgetInitilizationOptions"
+  merchant.MerchantCoin_metadata:
+    type: "object"
+    properties:
+      is_stable_coin:
+        type: "boolean"
+        description: "Is the coin a stable coin?"
+    example:
+      is_stable_coin: true
+  merchant.TransactionMetadata_onchain:
+    type: "object"
+    properties:
+      confirmations:
+        type: "integer"
+      from_address:
+        type: "string"
+      hash:
+        type: "string"
+      to_address:
+        type: "string"
+    example:
+      to_address: "to_address"
+      confirmations: 6
+      from_address: "from_address"
+      hash: "hash"
+  merchant.TransactionMetadata_payment:
+    type: "object"
+    properties:
+      amount:
+        type: "integer"
+        description: "Amount is what the user actually paid"
+      coin:
+        type: "integer"
+        description: "The coin the user used to make payment"
+      refund_amount:
+        type: "integer"
+      refund_status:
+        type: "integer"
+    example:
+      amount: 1
+      refund_status: 2
+      refund_amount: 5
+      coin: 5
+  merchant.WidgetTransaction_merchant:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+    example:
+      name: "name"
+  server.addPayoutAccountRequest_bank:
+    type: "object"
+    properties:
+      account_number:
+        type: "string"
+      bank_code:
+        type: "string"
+  server.addPayoutAccountRequest_crypto:
+    type: "object"
+    properties:
+      address:
+        type: "string"
+      coin:
+        type: "string"
+      label:
+        type: "string"
+  server.complianceDataResponse_uploader:
+    type: "object"
+    properties:
+      expiration:
+        type: "integer"
+      secret:
+        type: "string"
+    example:
+      expiration: 0
+      secret: "secret"
+  server.customerCreateRequest_phone:
+    type: "object"
+    properties:
+      code:
+        type: "string"
+      phone:
+        type: "string"
+  server.publicPaymentLinkResponse_link:
+    type: "object"
+    properties:
+      amount:
+        type: "integer"
+      collect_phone_number:
+        type: "boolean"
+      description:
+        type: "string"
+      domain:
+        type: "string"
+      merchant_name:
+        type: "string"
+      public_key:
+        type: "string"
+      title:
+        type: "string"
