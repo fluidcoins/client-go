@@ -3,6 +3,8 @@
 *.a
 *.so
 
+examples/main.go
+
 # Folders
 _obj
 _test
