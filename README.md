@@ -11,10 +11,40 @@ $ go get -u -v github.com/fluidcoins/client-go
 ## Documentation For Authorization
 
 ```golang
-auth := context.WithValue(context.Background(), sw.ContextAPIKey, sw.APIKey{
-	Key: "sk_key from the dashboard here",
-	Prefix: "Bearer",
-})
-r, err := client.Service.Operation(auth, args)
+
+import (
+	"context"
+	"encoding/json"
+	"log"
+	"os"
+
+	"github.com/fluidcoins/client-go/fluidcoins"
+)
+
+func main() {
+
+	c, err := fluidcoins.New(fluidcoins.SecretKey("sk_test_e93f2247654a4f2fb9021b1789b00a8c"))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	t, _, err := c.Transaction.GetByID(context.Background(), "TRANS_li5p6OWTfEn1Pc1hovawR")
+	if err != nil {
+	    log.Fatal(err)
+	}
+
+
+	json.NewEncoder(os.Stdout).Encode(t)
+
+	trans, _, err := c.Transaction.List(context.Background(), &fluidcoins.TransactionListOptions{
+		Perpage: 15,
+		Status:  fluidcoins.Overpaid,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	json.NewEncoder(os.Stdout).Encode(trans)
+}
 ```
 
