@@ -47,8 +47,8 @@ type apiStatus struct {
 	Message string `json:"message"`
 }
 
-// isSuccessful checks that the status of the transaction passes
-func (a apiStatus) isSuccessful() bool { return a.Status }
+// IsSuccessful checks that the status of the transaction passes
+func (a apiStatus) IsSuccessful() bool { return a.Status }
 
 // New creates a new instance of Cerberus
 func New(opts ...Option) (*Client, error) {
