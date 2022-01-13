@@ -34,6 +34,8 @@ type Client struct {
 	baseURL   string
 	userAgent string
 	secretKey string
+
+	Transaction *TransactionService
 }
 
 type service struct {
@@ -65,6 +67,7 @@ func New(opts ...Option) (*Client, error) {
 }
 
 func (c *Client) setUpServices() {
+	c.Transaction = &TransactionService{c}
 }
 
 func (c *Client) validate() error {
@@ -105,7 +108,7 @@ func (c *Client) NewRequest(method string, url string, v interface{}) (*http.Req
 }
 
 // Do makes the HTTP request and writes the body of the response into v
-func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*http.Response, error) {
+func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*Response, error) {
 
 	req = req.WithContext(ctx)
 
@@ -150,5 +153,11 @@ func (c *Client) Do(ctx context.Context, req *http.Request, v interface{}) (*htt
 		}
 	}
 
-	return resp, err
+	return &Response{resp}, err
+}
+
+// Response embeds the standard response struct and might in the future include
+// more detailed metadata about the response
+type Response struct {
+	*http.Response
 }
