@@ -15,6 +15,19 @@ const (
 	defaultUA      = "Fluidcoins/Client-go"
 )
 
+// Domain is the mode of the response.
+type Domain string
+
+const (
+	// LiveDomain is an operation that occurred on the mainnet
+	LiveDomain Domain = "live"
+	// TestDomain is an operation that occurred on the testnet
+	TestDomain Domain = "test"
+)
+
+// Amount is an abstraction to represent the lowest unit of a (crypto)currency
+type Amount int64
+
 // Client is the root object of cerberus. Used to interact with Paystack's API
 type Client struct {
 	c         *http.Client
