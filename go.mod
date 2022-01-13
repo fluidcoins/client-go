@@ -3,6 +3,7 @@ module github.com/fluidcoins/client-go
 go 1.16
 
 require (
-	github.com/antihax/optional v1.0.0
-	golang.org/x/oauth2 v0.0.0-20210628180205-a41e5a781914
+	github.com/kr/pretty v0.1.0 // indirect
+	github.com/stretchr/testify v1.4.0
+	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127 // indirect
 )
