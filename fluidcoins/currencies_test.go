@@ -14,17 +14,28 @@ import (
 )
 
 type roundTripper struct {
-	responseBody listCurrencyResponse
+	successResponseBody listCurrencyResponse
+	failureResponseBody apiStatus
+	statusCode          uint
+	isFailure           bool
 }
+
+var nilResp *Response
 
 func (rt *roundTripper) RoundTrip(r *http.Request) (*http.Response, error) {
 	rr, w := io.Pipe()
 
 	reqBodyBytes := new(bytes.Buffer)
-	json.NewEncoder(reqBodyBytes).Encode(rt.responseBody)
+
+	if rt.isFailure {
+		json.NewEncoder(reqBodyBytes).Encode(rt.failureResponseBody)
+	} else {
+		json.NewEncoder(reqBodyBytes).Encode(rt.successResponseBody)
+	}
+
 	resp := &http.Response{
 		Request:    r,
-		StatusCode: 200,
+		StatusCode: int(rt.statusCode),
 		Body:       rr,
 	}
 
@@ -38,7 +49,19 @@ func (rt *roundTripper) RoundTrip(r *http.Request) (*http.Response, error) {
 
 func NewRoundTripperWithResponse(resp listCurrencyResponse) *roundTripper {
 	return &roundTripper{
-		responseBody: resp,
+		successResponseBody: resp,
+		statusCode:          200,
+	}
+}
+
+func NewRoundTripperWithFailureResponse(statusCode uint, message string) *roundTripper {
+	return &roundTripper{
+		failureResponseBody: apiStatus{
+			Status:  false,
+			Message: message,
+		},
+		statusCode: statusCode,
+		isFailure:  true,
 	}
 }
 
@@ -94,11 +117,50 @@ func Test_Currencies(t *testing.T) {
 			c, _ := New(HTTPClient(h), SecretKey("oo"))
 			currs, resp, err := c.Currency.List(context.TODO(), tt.ListOptions)
 
-			fmt.Printf("resp is %v \n", resp)
 			require.NoError(t, err)
 			require.Equal(t, currs, tt.ExpectedModels)
 			require.Equal(t, resp.Request.Method, http.MethodGet)
 			require.Equal(t, resp.Request.URL.String(), tt.ExpectedRequestUrl)
+		})
+
+	}
+}
+
+func Test_Currencies_Errors(t *testing.T) {
+	cFTests := []struct {
+		Name            string
+		StatusCode      uint
+		ApiErrorMessage string
+	}{
+		{
+			Name:            "Bad-Request",
+			StatusCode:      400,
+			ApiErrorMessage: "Bad Filter",
+		},
+		{
+			Name:            "Unauthroized",
+			StatusCode:      401,
+			ApiErrorMessage: "Bad Api Key",
+		}, {
+			Name:            "Internal Server Error",
+			StatusCode:      500,
+			ApiErrorMessage: "Internal Server Error",
+		},
+	}
+
+	for _, tt := range cFTests {
+		h := &http.Client{
+			Timeout:   time.Second * 5,
+			Transport: NewRoundTripperWithFailureResponse(tt.StatusCode, tt.ApiErrorMessage),
+		}
+		t.Run(tt.Name, func(t *testing.T) {
+			c, _ := New(HTTPClient(h), SecretKey("oo"))
+			currs, resp, err := c.Currency.List(context.TODO(), &CurrencyListOptions{})
+
+			require.Error(t, err)
+			require.Equal(t, err.Error(), tt.ApiErrorMessage)
+			require.Equal(t, currs, []*Currency(nil))
+			require.Equal(t, resp, nilResp)
 		})
 
 	}
