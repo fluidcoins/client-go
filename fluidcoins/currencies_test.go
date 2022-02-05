@@ -14,7 +14,7 @@ import (
 )
 
 type roundTripper struct {
-	successResponseBody listCurrencyResponse
+	successResponseBody interface{}
 	failureResponseBody apiStatus
 	statusCode          uint
 	isFailure           bool
@@ -47,7 +47,7 @@ func (rt *roundTripper) RoundTrip(r *http.Request) (*http.Response, error) {
 	return resp, nil
 }
 
-func NewRoundTripperWithResponse(resp listCurrencyResponse) *roundTripper {
+func NewRoundTripperWithResponse(resp interface{}) *roundTripper {
 	return &roundTripper{
 		successResponseBody: resp,
 		statusCode:          200,
