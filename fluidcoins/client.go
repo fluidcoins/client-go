@@ -39,6 +39,7 @@ type Client struct {
 	secretKey string
 
 	Transaction *TransactionService
+	Currency    *CurrencyService
 }
 
 type service struct {
@@ -71,6 +72,7 @@ func New(opts ...Option) (*Client, error) {
 
 func (c *Client) setUpServices() {
 	c.Transaction = &TransactionService{c}
+	c.Currency = &CurrencyService{c}
 }
 
 func (c *Client) validate() error {
