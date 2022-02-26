@@ -71,7 +71,7 @@ type getAddressResponse struct {
 	Address Address `json:"address"`
 }
 
-// GetByID fetches a merchant address by the provided reference string. e.g ADDR_xy
+// GetByReference fetches a merchant address by the provided reference string. e.g ADDR_xy
 func (s *AddressService) GetByRef(ctx context.Context, ref string) (*Address, *Response, error) {
 
 	req, err := s.c.NewRequest(http.MethodGet, fmt.Sprintf("address/%s", ref), nil)
