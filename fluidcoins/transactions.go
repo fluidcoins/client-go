@@ -26,15 +26,15 @@ type TransactionService service
 
 // Transaction represents a transaction that occured via the payment widget
 type Transaction struct {
-	ID            uuid.UUID `json:"id"`
-	Amount        Amount    `json:"amount"`
-	Domain        Domain    `json:"domain"`
-	CustomerID    uuid.UUID `json:"-"`
-	Customer      *Customer `json:"customer"`
-	MerchantID    uuid.UUID `json:"-"`
-	PaymentLinkID uuid.UUID `json:"payment_link_id"`
-	Reference     string    `json:"reference"`
-	Status        string    `json:"status"`
+	ID            uuid.UUID         `json:"id"`
+	Amount        Amount            `json:"amount"`
+	Domain        Domain            `json:"domain"`
+	CustomerID    uuid.UUID         `json:"-"`
+	Customer      *Customer         `json:"customer"`
+	MerchantID    uuid.UUID         `json:"-"`
+	PaymentLinkID uuid.UUID         `json:"payment_link_id"`
+	Reference     string            `json:"reference"`
+	Status        TransactionStatus `json:"status"`
 
 	CreatedAt time.Time `json:"created_at"`
 	UpdatedAt time.Time `json:"updated_at"`
@@ -43,18 +43,6 @@ type Transaction struct {
 type transactionResponse struct {
 	apiStatus
 	Transaction Transaction `json:"transaction"`
-}
-
-type Merchant struct {
-	ID           uuid.UUID `json:"id"`
-	BusinessName string    `json:"business_name"`
-	Description  string    `json:"description"`
-	IndustryID   uuid.UUID `json:"industry_id"`
-
-	CountryID uuid.UUID `json:"country_id"`
-
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
 }
 
 // GetByID fetches a transaction by the provided ID.
