@@ -72,7 +72,7 @@ type getAddressResponse struct {
 }
 
 // GetByReference fetches a merchant address by the provided reference string. e.g ADDR_xy
-func (s *AddressService) GetByRef(ctx context.Context, ref string) (*Address, *Response, error) {
+func (s *AddressService) GetByReference(ctx context.Context, ref string) (*Address, *Response, error) {
 
 	req, err := s.c.NewRequest(http.MethodGet, fmt.Sprintf("address/%s", ref), nil)
 	if err != nil {
@@ -137,7 +137,7 @@ type addressTransactionsResponse struct {
 
 // List fetches all transactions for a particulat address. It uses the AddressTransactionsOptions to filter
 // the results. We default to 20 items per page and the first page
-func (s *AddressService) ListTx(ctx context.Context, ref string, opts *AddressTransactionsOptions) ([]*Transaction, *Response, error) {
+func (s *AddressService) ListTransactions(ctx context.Context, ref string, opts *AddressTransactionsOptions) ([]*Transaction, *Response, error) {
 
 	if opts.Perpage <= 0 {
 		opts.Perpage = 20
