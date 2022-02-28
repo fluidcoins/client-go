@@ -45,18 +45,6 @@ type transactionResponse struct {
 	Transaction Transaction `json:"transaction"`
 }
 
-type Merchant struct {
-	ID           uuid.UUID `json:"id"`
-	BusinessName string    `json:"business_name"`
-	Description  string    `json:"description"`
-	IndustryID   uuid.UUID `json:"industry_id"`
-
-	CountryID uuid.UUID `json:"country_id"`
-
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-}
-
 // GetByID fetches a transaction by the provided ID.
 func (t *TransactionService) GetByID(ctx context.Context, id string) (*Transaction, *Response, error) {
 
