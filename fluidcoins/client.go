@@ -41,6 +41,7 @@ type Client struct {
 	Transaction  *TransactionService
 	Currency     *CurrencyService
 	ExchangeRate *ExchangeRateService
+	Address      *AddressesService
 }
 
 type service struct {
@@ -50,6 +51,21 @@ type service struct {
 type apiStatus struct {
 	Status  bool   `json:"status"`
 	Message string `json:"message"`
+}
+
+type apiStatusWithMeta struct {
+	apiStatus
+	Meta ApiStatusMeta `json:"meta"`
+}
+
+type ApiStatusMeta struct {
+	Paging PagingMeta `json:"paging,omitempty"`
+}
+
+type PagingMeta struct {
+	Page    int64 `json:"page"`
+	Perpage int64 `json:"per_page"`
+	Total   int64 `json:"total"`
 }
 
 // IsSuccessful checks that the status of the transaction passes
@@ -75,6 +91,7 @@ func (c *Client) setUpServices() {
 	c.Transaction = &TransactionService{c}
 	c.Currency = &CurrencyService{c}
 	c.ExchangeRate = &ExchangeRateService{c}
+	c.Address = &AddressesService{c}
 }
 
 func (c *Client) validate() error {
