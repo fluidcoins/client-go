@@ -12,6 +12,51 @@ import (
 
 var nilPayoutAccount *PayoutAccount
 var nilPayout *Payout
+var nilBankInfo *ResolveBankInfo
+
+func Test_Payout_Account_Failure(t *testing.T) {
+	cFTests := []struct {
+		Name            string
+		StatusCode      uint
+		ApiErrorMessage string
+		ExpectedModel   interface{}
+	}{
+		{
+			Name:            "Bad-Request",
+			StatusCode:      400,
+			ApiErrorMessage: "Bad Filter",
+			ExpectedModel:   nilPayoutAccount,
+		},
+		{
+			Name:            "Unauthroized",
+			StatusCode:      401,
+			ApiErrorMessage: "Bad Api Key",
+			ExpectedModel:   nilPayoutAccount,
+		}, {
+			Name:            "Internal Server Error",
+			StatusCode:      500,
+			ApiErrorMessage: "Internal Server Error",
+			ExpectedModel:   nilPayoutAccount,
+		},
+	}
+
+	for _, tt := range cFTests {
+		h := &http.Client{
+			Timeout:   time.Second * 5,
+			Transport: NewRoundTripperWithFailureResponse(tt.StatusCode, tt.ApiErrorMessage),
+		}
+		t.Run(tt.Name, func(t *testing.T) {
+			c, _ := New(HTTPClient(h), SecretKey("oo"))
+			model, resp, err := c.Payout.CreatePayoutAccount(context.TODO(), &PayoutAccountCreateOptions{})
+
+			require.Error(t, err)
+			require.Equal(t, err.Error(), tt.ApiErrorMessage)
+			require.Equal(t, model, tt.ExpectedModel)
+			require.Equal(t, resp, nilResp)
+		})
+
+	}
+}
 
 func Test_Payout_Account_Create(t *testing.T) {
 	cFTests := []struct {
@@ -45,6 +90,50 @@ func Test_Payout_Account_Create(t *testing.T) {
 			require.Equal(t, payoutAccount, &tt.ExpectedModel)
 			require.Equal(t, resp.Request.Method, http.MethodPost)
 			require.Equal(t, resp.Request.URL.String(), fmt.Sprintf("%spayouts/accounts", defaultBaseURL))
+		})
+
+	}
+}
+
+func Test_Payout_Request_Failure(t *testing.T) {
+	cFTests := []struct {
+		Name            string
+		StatusCode      uint
+		ApiErrorMessage string
+		ExpectedModel   interface{}
+	}{
+		{
+			Name:            "Bad-Request",
+			StatusCode:      400,
+			ApiErrorMessage: "Bad Filter",
+			ExpectedModel:   nilPayout,
+		},
+		{
+			Name:            "Unauthroized",
+			StatusCode:      401,
+			ApiErrorMessage: "Bad Api Key",
+			ExpectedModel:   nilPayout,
+		}, {
+			Name:            "Internal Server Error",
+			StatusCode:      500,
+			ApiErrorMessage: "Internal Server Error",
+			ExpectedModel:   nilPayout,
+		},
+	}
+
+	for _, tt := range cFTests {
+		h := &http.Client{
+			Timeout:   time.Second * 5,
+			Transport: NewRoundTripperWithFailureResponse(tt.StatusCode, tt.ApiErrorMessage),
+		}
+		t.Run(tt.Name, func(t *testing.T) {
+			c, _ := New(HTTPClient(h), SecretKey("oo"))
+			model, resp, err := c.Payout.RequestPayout(context.TODO(), &RequestPayoutOptions{})
+
+			require.Error(t, err)
+			require.Equal(t, err.Error(), tt.ApiErrorMessage)
+			require.Equal(t, model, tt.ExpectedModel)
+			require.Equal(t, resp, nilResp)
 		})
 
 	}
@@ -84,6 +173,50 @@ func Test_Payout_Request(t *testing.T) {
 			require.Equal(t, link, &tt.ExpectedModel)
 			require.Equal(t, resp.Request.Method, http.MethodPost)
 			require.Equal(t, resp.Request.URL.String(), fmt.Sprintf("%spayouts", defaultBaseURL))
+		})
+
+	}
+}
+
+func Test_Payout_PayoutDetailsByReference_Failure(t *testing.T) {
+	cFTests := []struct {
+		Name            string
+		StatusCode      uint
+		ApiErrorMessage string
+		ExpectedModel   interface{}
+	}{
+		{
+			Name:            "Bad-Request",
+			StatusCode:      400,
+			ApiErrorMessage: "Bad Filter",
+			ExpectedModel:   nilPayout,
+		},
+		{
+			Name:            "Unauthroized",
+			StatusCode:      401,
+			ApiErrorMessage: "Bad Api Key",
+			ExpectedModel:   nilPayout,
+		}, {
+			Name:            "Internal Server Error",
+			StatusCode:      500,
+			ApiErrorMessage: "Internal Server Error",
+			ExpectedModel:   nilPayout,
+		},
+	}
+
+	for _, tt := range cFTests {
+		h := &http.Client{
+			Timeout:   time.Second * 5,
+			Transport: NewRoundTripperWithFailureResponse(tt.StatusCode, tt.ApiErrorMessage),
+		}
+		t.Run(tt.Name, func(t *testing.T) {
+			c, _ := New(HTTPClient(h), SecretKey("oo"))
+			model, resp, err := c.Payout.PayoutDetailsByReference(context.TODO(), "reference")
+
+			require.Error(t, err)
+			require.Equal(t, err.Error(), tt.ApiErrorMessage)
+			require.Equal(t, model, tt.ExpectedModel)
+			require.Equal(t, resp, nilResp)
 		})
 
 	}
@@ -136,6 +269,50 @@ func Test_Payout_PayoutDetailsByReference(t *testing.T) {
 	}
 }
 
+func Test_Payout_Cancel_Failure(t *testing.T) {
+	cFTests := []struct {
+		Name            string
+		StatusCode      uint
+		ApiErrorMessage string
+		ExpectedModel   interface{}
+	}{
+		{
+			Name:            "Bad-Request",
+			StatusCode:      400,
+			ApiErrorMessage: "Bad Filter",
+			ExpectedModel:   nilPayout,
+		},
+		{
+			Name:            "Unauthroized",
+			StatusCode:      401,
+			ApiErrorMessage: "Bad Api Key",
+			ExpectedModel:   nilPayout,
+		}, {
+			Name:            "Internal Server Error",
+			StatusCode:      500,
+			ApiErrorMessage: "Internal Server Error",
+			ExpectedModel:   nilPayout,
+		},
+	}
+
+	for _, tt := range cFTests {
+		h := &http.Client{
+			Timeout:   time.Second * 5,
+			Transport: NewRoundTripperWithFailureResponse(tt.StatusCode, tt.ApiErrorMessage),
+		}
+		t.Run(tt.Name, func(t *testing.T) {
+			c, _ := New(HTTPClient(h), SecretKey("oo"))
+			model, resp, err := c.Payout.Cancel(context.TODO(), "reference")
+
+			require.Error(t, err)
+			require.Equal(t, err.Error(), tt.ApiErrorMessage)
+			require.Equal(t, model, tt.ExpectedModel)
+			require.Equal(t, resp, nilResp)
+		})
+
+	}
+}
+
 func Test_Payout_Cancel(t *testing.T) {
 	cFTests := []struct {
 		Name          string
@@ -183,6 +360,50 @@ func Test_Payout_Cancel(t *testing.T) {
 	}
 }
 
+func Test_Payout_ResolveBankAccount_Failure(t *testing.T) {
+	cFTests := []struct {
+		Name            string
+		StatusCode      uint
+		ApiErrorMessage string
+		ExpectedModel   interface{}
+	}{
+		{
+			Name:            "Bad-Request",
+			StatusCode:      400,
+			ApiErrorMessage: "Bad Filter",
+			ExpectedModel:   nilBankInfo,
+		},
+		{
+			Name:            "Unauthroized",
+			StatusCode:      401,
+			ApiErrorMessage: "Bad Api Key",
+			ExpectedModel:   nilBankInfo,
+		}, {
+			Name:            "Internal Server Error",
+			StatusCode:      500,
+			ApiErrorMessage: "Internal Server Error",
+			ExpectedModel:   nilBankInfo,
+		},
+	}
+
+	for _, tt := range cFTests {
+		h := &http.Client{
+			Timeout:   time.Second * 5,
+			Transport: NewRoundTripperWithFailureResponse(tt.StatusCode, tt.ApiErrorMessage),
+		}
+		t.Run(tt.Name, func(t *testing.T) {
+			c, _ := New(HTTPClient(h), SecretKey("oo"))
+			model, resp, err := c.Payout.ResolveBankAccount(context.TODO(), &ResolveBankInfoOptions{})
+
+			require.Error(t, err)
+			require.Equal(t, err.Error(), tt.ApiErrorMessage)
+			require.Equal(t, model, tt.ExpectedModel)
+			require.Equal(t, resp, nilResp)
+		})
+
+	}
+}
+
 func Test_Payout_ResolveBankAccount(t *testing.T) {
 	cFTests := []struct {
 		Name          string
@@ -213,12 +434,52 @@ func Test_Payout_ResolveBankAccount(t *testing.T) {
 		}
 		t.Run(tt.Name, func(t *testing.T) {
 			c, _ := New(HTTPClient(h), SecretKey("oo"))
-			payout, resp, err := c.Payout.ResolveBankAccount(context.TODO(), tt.Opts)
+			bankInfo, resp, err := c.Payout.ResolveBankAccount(context.TODO(), tt.Opts)
 
 			require.NoError(t, err)
-			require.Equal(t, payout, &tt.ExpectedModel)
+			require.Equal(t, bankInfo, &tt.ExpectedModel)
 			require.Equal(t, resp.Request.Method, http.MethodGet)
 			require.Equal(t, resp.Request.URL.String(), fmt.Sprintf("%spayouts/accounts/banks/resolve?account=%s&bank_code=%s", defaultBaseURL, tt.Opts.AccountNumber, tt.Opts.BankCode))
+		})
+
+	}
+}
+
+func Test_Payout_ListBanks_Failure(t *testing.T) {
+	cFTests := []struct {
+		Name            string
+		StatusCode      uint
+		ApiErrorMessage string
+	}{
+		{
+			Name:            "Bad-Request",
+			StatusCode:      400,
+			ApiErrorMessage: "Bad Filter",
+		},
+		{
+			Name:            "Unauthroized",
+			StatusCode:      401,
+			ApiErrorMessage: "Bad Api Key",
+		}, {
+			Name:            "Internal Server Error",
+			StatusCode:      500,
+			ApiErrorMessage: "Internal Server Error",
+		},
+	}
+
+	for _, tt := range cFTests {
+		h := &http.Client{
+			Timeout:   time.Second * 5,
+			Transport: NewRoundTripperWithFailureResponse(tt.StatusCode, tt.ApiErrorMessage),
+		}
+		t.Run(tt.Name, func(t *testing.T) {
+			c, _ := New(HTTPClient(h), SecretKey("oo"))
+			model, resp, err := c.Payout.ListBanks(context.TODO(), &ListBankOptions{})
+
+			require.Error(t, err)
+			require.Equal(t, err.Error(), tt.ApiErrorMessage)
+			require.Equal(t, model, []*Bank(nil))
+			require.Equal(t, resp, nilResp)
 		})
 
 	}
