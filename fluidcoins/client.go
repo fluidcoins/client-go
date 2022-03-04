@@ -43,6 +43,8 @@ type Client struct {
 	ExchangeRate *ExchangeRateService
 	Address      *AddressesService
 	Customer     *CustomerService
+	PaymentLink  *PaymentLinkService
+	Payout       *PayoutService
 }
 
 type service struct {
@@ -94,6 +96,8 @@ func (c *Client) setUpServices() {
 	c.ExchangeRate = &ExchangeRateService{c}
 	c.Address = &AddressesService{c}
 	c.Customer = &CustomerService{c}
+	c.PaymentLink = &PaymentLinkService{c}
+	c.Payout = &PayoutService{c}
 }
 
 func (c *Client) validate() error {
