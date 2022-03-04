@@ -19,7 +19,7 @@ type Address struct {
 	Coin       Coin      `json:"coin"`
 	Domain     string    `json:"domain"`
 	MerchantID string    `json:"merchant_id"`
-	// Refernece is the unique ID for this address. You can use this id to fetch the address again
+	// Reference is the unique ID for this address. You can use this id to fetch the address again
 	Reference string          `json:"reference"`
 	Metadata  AddressMetadata `json:"metadata"`
 
@@ -32,7 +32,7 @@ type Coin struct {
 	Code string    `json:"code"`
 
 	HumanReadableName string `json:"human_readable_name"`
-	// This is a base64 encoded image not an actual url resource
+	// This is a url link ( hosted by us ) to the logo of the coin.
 	Image string `json:"image"`
 	// IsAvailableOnWidget determines if this currency coin is a payment option on our widget
 	IsAvailableOnWidget bool `json:"is_available_on_widget"`
