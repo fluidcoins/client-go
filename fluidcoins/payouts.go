@@ -59,7 +59,7 @@ type PayoutCrypto struct {
 type PayoutCoin struct {
 	model
 	Code string `json:"code"`
-	// This is a base64 encoded image not an actual url resource
+	// This is a url link ( hosted by us ) to the logo of the coin.
 	Image      string `json:"image"`
 	HasTestNet bool   `json:"has_test_net"`
 
