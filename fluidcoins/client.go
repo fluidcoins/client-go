@@ -10,9 +10,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/fluidcoins/client-go/util"
 	"github.com/google/go-querystring/query"
-	"github.com/spf13/viper"
 )
 
 const (
@@ -52,40 +50,23 @@ type apiStatus struct {
 	Message string `json:"message"`
 }
 
-type APIAuth struct {
-	Apikey string `mapstructure:"API_KEY"`
+type apiStatusWithMeta struct {
+	apiStatus
+	Meta ApiStatusMeta `json:"meta"`
+}
+
+type ApiStatusMeta struct {
+	Paging PagingMeta `json:"paging,omitempty"`
+}
+
+type PagingMeta struct {
+	Page    int64 `json:"page"`
+	Perpage int64 `json:"per_page"`
+	Total   int64 `json:"total"`
 }
 
 // IsSuccessful checks that the status of the transaction passes
 func (a apiStatus) IsSuccessful() bool { return a.Status }
-
-// LoadAPIKey loads generated API key from the environment variables for
-// authenticating API calls
-func LoadAPIKey() (string, error) {
-
-	viper.AddConfigPath("../")
-	viper.SetConfigName("app")
-	viper.SetConfigType("env")
-
-	viper.AutomaticEnv()
-
-	err := viper.ReadInConfig()
-	if err != nil {
-		return "", err
-	}
-
-	a := new(APIAuth)
-	err = viper.Unmarshal(a)
-	if err != nil {
-		return "", err
-	}
-
-	if util.IsStringEmpty(a.Apikey) {
-		return "", errors.New("environment variable API_KEY is empty")
-	}
-
-	return a.Apikey, nil
-}
 
 // New creates a new instance of Cerberus
 func New(opts ...Option) (*Client, error) {

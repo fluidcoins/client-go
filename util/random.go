@@ -26,6 +26,12 @@ func RandomBool() bool {
 	return b[rand.Intn(n)]
 }
 
+func RandomCurrency() string {
+	b := []string{"USD", "NGN"}
+	n := len(b)
+	return b[rand.Intn(n)]
+}
+
 func RandomInt(min, max int64) int64 { return min + rand.Int63n(max-min+1) }
 
 func RandomAmount() int64 { return RandomInt(7777, 598970) }
