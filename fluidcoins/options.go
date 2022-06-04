@@ -23,6 +23,12 @@ func UserAgent(s string) Option {
 	}
 }
 
+func APIBaseURL(s string) Option {
+	return func(c *Client) {
+		c.baseURL = s
+	}
+}
+
 // SecretKey allows you set the key required to communicate with the API
 func SecretKey(s string) Option {
 	return func(c *Client) {
