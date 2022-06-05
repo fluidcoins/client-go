@@ -53,7 +53,7 @@ type AddressMetadata struct {
 	// XLM requires a memo
 	Memo string `json:"memo"`
 	// XRP addresses must have a destination tag
-	DestinationTag string `json:"destination_tag"`
+	DestinationTag int64 `json:"destination_tag"`
 	// can be erc20, trc20 or bsc
 	// if empty, then assume the default chain
 	// in cases such as btc,ltc and what not
