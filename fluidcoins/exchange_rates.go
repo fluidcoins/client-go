@@ -14,9 +14,9 @@ type ExchangeRate struct {
 	Rate                 int64                        `json:"rate"`
 	BuyRate              int64                        `json:"buy_rate"`
 	SaleRate             int64                        `json:"sale_rate"`
-	HumanReadableBuyRate int64                        `json:"human_readable_buy_rate"`
-	HumanReadableRate    int64                        `json:"human_readable_sale_rate"`
-	HumanReadableAmount  int64                        `json:"human_readable_amount"`
+	HumanReadableBuyRate float64                      `json:"human_readable_buy_rate"`
+	HumanReadableRate    float64                      `json:"human_readable_sale_rate"`
+	HumanReadableAmount  float64                      `json:"human_readable_amount"`
 }
 
 type ExchangeRateCurrencyMetadata struct {
