@@ -20,7 +20,7 @@ type PayoutAccount struct {
 	Bank       PayoutBank   `json:"bank"`
 	Crypto     PayoutCrypto `json:"crypto"`
 
-	PayoutType int64  `json:"payout_type"`
+	PayoutType string `json:"payout_type"`
 	Reference  string `json:"reference"`
 }
 
@@ -32,7 +32,7 @@ type Payout struct {
 	Coin       PayoutCoin     `json:"coin"`
 	Domain     string         `json:"domain"`
 	Metadata   PayoutMetadata `json:"metadata"`
-	PayoutType int64          `json:"payout_type"`
+	PayoutType string         `json:"payout_type"`
 	Reference  string         `json:"reference"`
 
 	// This will be automatically updated based on payout attempts
