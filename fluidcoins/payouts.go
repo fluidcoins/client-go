@@ -35,7 +35,7 @@ type Payout struct {
 	Reference  string         `json:"reference"`
 
 	// This will be automatically updated based on payout attempts
-	Status int64 `json:"status"`
+	Status string `json:"status"`
 }
 
 type PayoutBank struct {
