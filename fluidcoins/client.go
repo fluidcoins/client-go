@@ -45,6 +45,7 @@ type Client struct {
 	Customer     *CustomerService
 	PaymentLink  *PaymentLinkService
 	Payout       *PayoutService
+	Earn         *EarnService
 }
 
 type service struct {
@@ -98,6 +99,7 @@ func (c *Client) setUpServices() {
 	c.Customer = &CustomerService{c}
 	c.PaymentLink = &PaymentLinkService{c}
 	c.Payout = &PayoutService{c}
+	c.Earn = &EarnService{c}
 }
 
 func (c *Client) validate() error {
